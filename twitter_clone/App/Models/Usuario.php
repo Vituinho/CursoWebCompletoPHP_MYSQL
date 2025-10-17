@@ -62,17 +62,26 @@ class Usuario extends Model {
     }
 
     public function autenticar() {
+    $query = "SELECT id, nome, email FROM usuarios WHERE email = :email AND senha = :senha";
+    $stmt = $this->db->prepare($query);
+    $stmt->bindValue(':email', $this->__get('email'));
+    $stmt->bindValue(':senha', $this->__get('senha'));
+    $stmt->execute();
 
-        $query = "SELECT id, nome, email from usuarios WHERE email = :email and senha = :senha";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindValue(':email', $this->__get('email'));
-        $stmt->bindValue(':senha', $this->__get('senha'));
-        $stmt->execute();
+    $usuario = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        $usuario = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-        return $usuario;
+    if ($usuario) { // só entra aqui se fetch() achou algo
+        $this->__set('id', $usuario['id']);
+        $this->__set('nome', $usuario['nome']);
+        return true; // login bem-sucedido
     }
+
+    // se não achou usuário
+    $this->__set('id', null);
+    $this->__set('nome', null);
+    return false; // falha no login
+}
+
 }
 
 ?>
