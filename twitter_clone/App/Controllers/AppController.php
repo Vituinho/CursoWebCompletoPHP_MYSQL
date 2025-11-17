@@ -31,6 +31,21 @@ class AppController extends Action {
         
     }
 
+    public function remover() {
+
+        $this->validaAutenticacao();
+        $tweet = Container::getModel('Tweet');
+
+        $tweet->__set('id_usuario', $_SESSION['id']);
+        $tweet->__set('id', $_GET['id_tweet']);
+        
+        $tweet->remover();
+
+        header('Location: /timeline');
+        exit;
+
+    }
+
     public function validaAutenticacao() {
         session_start();
 
