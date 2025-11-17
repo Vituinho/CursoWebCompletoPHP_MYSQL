@@ -15,6 +15,16 @@ class AppController extends Action {
         $tweet->__set('id_usuario', $_SESSION['id']);
         $tweets = $tweet->getAll();
         $this->view->tweets = $tweets;
+
+        $usuario = Container::getModel('Usuario');
+        $usuario->__set('id', $_SESSION['id']);
+
+        $this->view->info_usuario = $usuario->getInfoUsuario();
+        $this->view->total_tweets = $usuario->getTotalTweets();
+        $this->view->total_seguindo = $usuario->getTotalSeguindo();
+        $this->view->total_seguidores = $usuario->getTotalSeguidores();
+
+
         $this->render('timeline');
 
     }
@@ -89,6 +99,9 @@ class AppController extends Action {
         } else if($acao == 'deixar_de_seguir') {
             $usuario->deixarSeguirUsuario($id_usuario_seguindo);
         }
+
+        header('Location: /timeline');
+        exit;
     }
 
 }
