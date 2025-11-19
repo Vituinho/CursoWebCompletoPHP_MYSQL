@@ -11,9 +11,32 @@ class AppController extends Action {
     public function timeline() {
 
         $this->validaAutenticacao();
+
         $tweet = Container::getModel('Tweet');
+
         $tweet->__set('id_usuario', $_SESSION['id']);
-        $tweets = $tweet->getAll();
+
+        //variaveis de paginação
+        $total_registros_pagina = 10;
+        $deslocamento = 0;
+        $pagina = 1;
+
+        //---
+        $total_registros_pagina = 10;
+        $deslocamento = 10;
+        $pagina = 2;
+
+        //---
+        $total_registros_pagina = 10;
+        $deslocamento = 20;
+        $pagina = 3;
+
+        echo "<br><br><br>Página: $pagina | Total de registros por página $total_registros_pagina | Deslocamento: $deslocamento";
+        $tweets = $tweet->getPorPagina($total_registros_pagina, $deslocamento);
+        $total_tweets = $tweet->getTotalRegistros();
+        
+        print_r($total_tweets);
+
         $this->view->tweets = $tweets;
 
         $usuario = Container::getModel('Usuario');
