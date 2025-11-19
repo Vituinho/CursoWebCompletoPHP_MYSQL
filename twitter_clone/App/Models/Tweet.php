@@ -111,7 +111,7 @@ class Tweet extends Model {
         $stmt->bindValue(':id_usuario', $this->__get('id_usuario'));
         $stmt->execute();
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
 
 }
